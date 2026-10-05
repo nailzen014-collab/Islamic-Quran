@@ -4,15 +4,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ExploreController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\MealPlanController;
 use App\Http\Controllers\RecipeApiController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShoppingListController;
-use App\Http\Controllers\SyncController;
 use App\Http\Controllers\StatsController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,12 +44,6 @@ Route::middleware('auth')->group(function (): void {
     Route::put('/koleksi/{collection}', [CollectionController::class, 'update'])->name('koleksi.update');
     Route::delete('/koleksi/{collection}', [CollectionController::class, 'destroy'])->name('koleksi.destroy');
     Route::post('/koleksi/{collection}/resep', [CollectionController::class, 'toggleRecipe'])->name('koleksi.resep');
-
-    Route::get('/rencana', [MealPlanController::class, 'index'])->name('rencana');
-    Route::post('/rencana', [MealPlanController::class, 'store'])->name('rencana.store');
-    Route::put('/rencana/{mealPlan}', [MealPlanController::class, 'update'])->name('rencana.update');
-    Route::delete('/rencana/{mealPlan}', [MealPlanController::class, 'destroy'])->name('rencana.destroy');
-    Route::delete('/rencana/minggu', [MealPlanController::class, 'clearWeek'])->name('rencana.clear');
 
     Route::get('/belanja', [ShoppingListController::class, 'index'])->name('belanja');
     Route::post('/belanja', [ShoppingListController::class, 'store'])->name('belanja.store');

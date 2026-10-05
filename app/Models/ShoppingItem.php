@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\ShoppingItemFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ShoppingItem extends Model
 {
-    /** @use HasFactory<\Database\Factories\ShoppingItemFactory> */
+    /** @use HasFactory<ShoppingItemFactory> */
     use HasFactory;
 
     protected $fillable = [

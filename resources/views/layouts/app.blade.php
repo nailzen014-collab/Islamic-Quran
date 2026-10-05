@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="@yield('description', 'Recipes —-platform resep lengkap dengan pencarian, filter, favorites, rencana makan, dan daftar belanja.')">
+    <meta name="description" content="@yield('description', 'Recipes —-platform resep lengkap dengan pencarian, filter, favorites, koleksi, dan daftar belanja.')">
 
     <title>@yield('title', 'Recipes') &middot; Recipes</title>
 
@@ -77,10 +77,10 @@
                     'is-active' => request()->routeIs('koleksi*'),
                 ])>Koleksi</a>
 
-                <a href="{{ route('rencana') }}" @class([
+                <a href="{{ route('koleksi.index') }}" @class([
                     'nav-link hidden sm:inline-flex',
-                    'is-active' => request()->routeIs('rencana*'),
-                ])>Rencana</a>
+                    'is-active' => request()->routeIs('koleksi*'),
+                ])>Koleksi</a>
 
                 <a href="{{ route('belanja') }}" @class([
                     'nav-link hidden lg:inline-flex',
@@ -118,7 +118,6 @@
                             <p class="truncate text-xs text-slate-500">{{ auth()->user()->kitchen_name }}</p>
                         </div>
                         <a href="{{ route('koleksi.index') }}" class="dropdown-item">Koleksi saya</a>
-                        <a href="{{ route('rencana') }}" class="dropdown-item">Rencana makan</a>
                         <a href="{{ route('belanja') }}" class="dropdown-item">Daftar belanja</a>
                         <a href="{{ route('statistik') }}" class="dropdown-item">Statistik</a>
                         <form action="{{ route('logout') }}" method="POST">
@@ -149,7 +148,6 @@
         <a href="{{ route('statistik') }}" class="mobile-link">Statistik</a>
         @auth
             <a href="{{ route('koleksi.index') }}" class="mobile-link">Koleksi</a>
-            <a href="{{ route('rencana') }}" class="mobile-link">Rencana makan</a>
             <a href="{{ route('belanja') }}" class="mobile-link">Daftar belanja</a>
             <form action="{{ route('logout') }}" method="POST">@csrf<button type="submit" class="mobile-link w-full text-left text-rose-500">Keluar</button></form>
         @else

@@ -72,9 +72,9 @@ class DatabaseSeeder extends Seeder
         return [
             "Wajib masak ulang. Cuma {$total} menit, tapi rasanya di luar ekspektasi.",
             "Bahannya gampang dicari di pasar. {$count} bahan sudah cukup untuk makan malam.",
-            "Ini jadi andalan kalau lagi malas masak tapi pengen yang cepat.",
-            "Langkah-langkahnya jelas, tidak ada yang loncat-loncat. Sangat membantu.",
-            "Lumayan cepat dan bahannya tidak mahal. Pasti masak lagi.",
+            'Ini jadi andalan kalau lagi malas masak tapi pengen yang cepat.',
+            'Langkah-langkahnya jelas, tidak ada yang loncat-loncat. Sangat membantu.',
+            'Lumayan cepat dan bahannya tidak mahal. Pasti masak lagi.',
         ][array_rand([0, 1, 2, 3, 4])];
     }
 

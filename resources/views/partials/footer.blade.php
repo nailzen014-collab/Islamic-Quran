@@ -44,7 +44,6 @@
                 <ul class="mt-4 space-y-2.5 text-sm text-slate-500 dark:text-slate-400">
                     @auth
                         <li><a href="{{ route('koleksi.index') }}" class="link-underline hover:text-ember-600">Koleksi</a></li>
-                        <li><a href="{{ route('rencana') }}" class="link-underline hover:text-ember-600">Rencana makan</a></li>
                         <li><a href="{{ route('belanja') }}" class="link-underline hover:text-ember-600">Daftar belanja</a></li>
                     @else
                         <li><a href="{{ route('login') }}" class="link-underline hover:text-ember-600">Masuk</a></li>

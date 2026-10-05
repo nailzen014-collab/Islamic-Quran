@@ -30,6 +30,21 @@ export function initRecipeFilters() {
 
         const url = `${endpoint}?${new FormData(form).toString()}`;
         const grid = results.querySelector('[data-filter-grid]');
+        const loadingEl = grid?.querySelector('[data-loaders]') || (() => {
+            const div = document.createElement('div');
+            div.setAttribute('data-loaders', '');
+            div.innerHTML = `
+                <div class="loading-spinner size-10 flex items-center justify-center mx-auto mt-4" style="color: #f97316;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5 animate-spin">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-4a2 2 0 00-2-2H6a2 2 0 00-2 2v4a2 2 0 002 2zm10-10V7a2 2 0 00-2-2H6a2 2 0 00-2 2v4h12a2 2 0 002-2v-4a2 2 0 00-2-2H4"/>
+                    </svg>
+                </div>
+                <span class="text-slate-500 text-sm ml-2">Memuat resep...</span>
+            `;
+            grid.appendChild(div);
+            return div;
+        })();
+
         grid?.classList.add('is-loading');
 
         try {
@@ -67,6 +82,7 @@ export function initRecipeFilters() {
             }
         } finally {
             grid?.classList.remove('is-loading');
+            loadingEl?.remove();
         }
     };
 

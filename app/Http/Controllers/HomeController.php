@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
-use App\Models\User;
 use App\Services\RecipeImporter;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;

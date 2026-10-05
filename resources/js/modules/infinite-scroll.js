@@ -10,6 +10,7 @@ export function initInfiniteScroll() {
     const url = sentinel.dataset.infiniteSentinel;
     const fallback = document.querySelector('[data-pagination]');
     let loading = false;
+    let observer;
 
     const loadNext = async () => {
         if (loading) return;
@@ -32,10 +33,12 @@ export function initInfiniteScroll() {
 
             if (nextUrl) {
                 sentinel.dataset.infiniteSentinel = nextUrl;
-                grid.dispatchEvent(new CustomEvent('filter:refresh'));
             } else {
                 sentinel.remove();
                 fallback?.classList.add('is-hidden');
+                if (observer) {
+                    observer.disconnect();
+                }
             }
 
             grid.dispatchEvent(new CustomEvent('filter:refresh'));
@@ -47,7 +50,7 @@ export function initInfiniteScroll() {
         }
     };
 
-    const observer = new IntersectionObserver(
+    observer = new IntersectionObserver(
         (entries) => {
             if (entries.some((entry) => entry.isIntersecting)) loadNext();
         },

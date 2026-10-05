@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MealPlan;
 use App\Models\Recipe;
 use App\Models\ShoppingItem;
 use Illuminate\Http\JsonResponse;

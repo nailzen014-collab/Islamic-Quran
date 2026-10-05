@@ -1074,6 +1074,11 @@
         border-color: rgb(148 163 184 / 0.4);
     }
 
+    .loading-text {
+        color: rgb(148 163 184);
+        font-size: 0.8rem;
+    }
+
     .is-hidden {
         display: none !important;
     }

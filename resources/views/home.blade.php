@@ -11,7 +11,6 @@
                         <span class="absolute inline-flex size-full animate-ping rounded-full bg-ember-400 opacity-75"></span>
                         <span class="relative inline-flex size-2 rounded-full bg-ember-500"></span>
                     </span>
-                    {{ number_format($totalRecipes) }} resep langsung dari API
                 </p>
 
                 <h1 class="display-title mt-5 text-4xl text-slate-900 sm:text-5xl lg:text-6xl dark:text-white" data-reveal style="--reveal-delay:80ms">
