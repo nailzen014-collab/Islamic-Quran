@@ -2,60 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Recipe;
-use App\Services\RecipeImporter;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function __invoke(RecipeImporter $importer): View
+    public function __invoke(): View
     {
-        if (Recipe::query()->doesntExist()) {
-            $importer->syncQuietly();
+        $totalDoa = 0;
+        $totalSurah = 0;
+
+        try {
+            $doaRes = Http::timeout(5)->get('https://equran.id/api/doa');
+            $totalDoa = count($doaRes->json('data') ?? []);
+        } catch (\Throwable $e) {
+            $totalDoa = 0;
         }
 
-        $user = Auth::user();
-
-        $featured = Recipe::query()
-            ->orderByDesc('rating')
-            ->orderByDesc('review_count')
-            ->limit(3)
-            ->get();
-
-        $quick = Recipe::query()
-            ->whereRaw('prep_time_minutes + cook_time_minutes <= 25')
-            ->inRandomOrder()
-            ->limit(4)
-            ->get();
-
-        $trending = Recipe::query()
-            ->orderByDesc('review_count')
-            ->limit(6)
-            ->get();
-
-        $newest = Recipe::query()
-            ->latest('external_id')
-            ->limit(6)
-            ->get();
-
-        $topRated = Recipe::query()
-            ->orderByDesc('rating')
-            ->limit(5)
-            ->get();
+        try {
+            $surahRes = Http::timeout(5)->get('https://equran.id/api/v2/surat');
+            $totalSurah = count($surahRes->json('data') ?? []);
+        } catch (\Throwable $e) {
+            $totalSurah = 0;
+        }
 
         return view('home', [
-            'featured' => $featured,
-            'quick' => $quick,
-            'trending' => $trending,
-            'newest' => $newest,
-            'topRated' => $topRated,
-            'cuisines' => Recipe::allCuisines(),
-            'mealTypes' => Recipe::allMealTypes(),
-            'totalRecipes' => Recipe::count(),
-            'totalCuisines' => Recipe::allCuisines()->count(),
-            'totalTags' => Recipe::allTags()->count(),
-            'userFavorites' => $user?->favoritedRecipes()->limit(4)->get() ?? collect(),
+            'totalDoa' => $totalDoa,
+            'totalSurah' => $totalSurah,
+            'totalAyat' => 6236,
         ]);
     }
 }
