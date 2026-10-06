@@ -97,6 +97,9 @@
                     </tbody>
                 </table>
                 </div>
+                <div class="flex justify-center border-t border-black/5 px-4 py-4 dark:border-white/10">
+                    @include('partials.mobile-pagination', ['paginator' => $jadwal['jadwal']])
+                </div>
             </div>
         @endif
     </section>

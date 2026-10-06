@@ -4,13 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 
 class JadwalShalatController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        if (
+            $request->query->has('provinsi')
+            && $request->query->has('kabkota')
+            && $request->query->has('bulan')
+            && $request->query->has('tahun')
+        ) {
+            return $this->getJadwal($request);
+        }
+
         $response = Http::connectTimeout(3)
             ->timeout(10)
             ->get('https://equran.id/api/v2/shalat/provinsi')
@@ -88,6 +98,24 @@ class JadwalShalatController extends Controller
             ->throw();
 
         $jadwal = $jadwalRes->json('data');
+        $jadwalItems = collect($jadwal['jadwal'] ?? []);
+        $perPage = 7;
+        $page = LengthAwarePaginator::resolveCurrentPage();
+        $jadwal['jadwal'] = new LengthAwarePaginator(
+            $jadwalItems->forPage($page, $perPage)->values(),
+            $jadwalItems->count(),
+            $perPage,
+            $page,
+            [
+                'path' => url('/jadwal-shalat'),
+                'query' => [
+                    'provinsi' => $provinsi,
+                    'kabkota' => $kabkota,
+                    'bulan' => $bulan,
+                    'tahun' => $tahun,
+                ],
+            ],
+        );
 
         return view('jadwal-shalat.index', [
             'provinsi' => $provList,

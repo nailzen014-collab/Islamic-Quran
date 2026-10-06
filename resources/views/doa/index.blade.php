@@ -9,7 +9,7 @@
                 <p class="section-eyebrow">Kumpulan Doa Harian</p>
                 <h1 class="display-title mt-2 text-3xl sm:text-4xl">Doa Sehari-hari</h1>
                 <p class="mt-2 max-w-2xl text-sm text-slate-600 dark:text-slate-400">
-                    Berdasarkan API equran.id, total {{ number_format(count($doa)) }} doa.
+                    Berdasarkan API equran.id, total {{ number_format($doa->total()) }} doa.
                 </p>
             </div>
             <form action="{{ route('doa.index') }}" method="GET" class="w-full sm:w-auto">
@@ -22,13 +22,24 @@
             </form>
         </div>
 
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <p class="mb-4 text-xs text-slate-500 dark:text-slate-400">
+            @if ($doa->total() > 0)
+                Menampilkan {{ $doa->firstItem() }}–{{ $doa->lastItem() }} dari {{ $doa->total() }} doa
+            @else
+                Tidak ada doa untuk ditampilkan
+            @endif
+        </p>
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
             @forelse ($doa as $item)
                 <a href="{{ route('doa.show', $item['id']) }}" class="surface block p-5 transition hover:shadow-md">
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <span class="text-xs text-slate-500">{{ $item['grup'] ?? '-' }}</span>
                             <h2 class="display-title mt-1 text-lg">{{ $item['nama'] }}</h2>
+                        </div>
+
+                        <div class="mt-7 flex justify-center sm:mt-9">
+                            @include('partials.mobile-pagination', ['paginator' => $doa])
                         </div>
                         <span class="badge">#{{ $item['id'] }}</span>
                     </div>

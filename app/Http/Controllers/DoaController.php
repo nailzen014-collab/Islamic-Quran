@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -21,7 +22,7 @@ class DoaController extends Controller
             ->throw();
 
         $query = trim($validated['q'] ?? '');
-        $doa = collect($response->json('data'))
+        $doaItems = collect($response->json('data'))
             ->filter(function (array $item) use ($query): bool {
                 if ($query === '') {
                     return true;
@@ -38,6 +39,18 @@ class DoaController extends Controller
                 return Str::contains(Str::lower($searchableText), Str::lower($query));
             })
             ->values();
+        $perPage = 12;
+        $page = LengthAwarePaginator::resolveCurrentPage();
+        $doa = new LengthAwarePaginator(
+            $doaItems->forPage($page, $perPage)->values(),
+            $doaItems->count(),
+            $perPage,
+            $page,
+            [
+                'path' => $request->url(),
+                'query' => $request->query(),
+            ],
+        );
 
         return view('doa.index', [
             'doa' => $doa,
@@ -53,9 +66,21 @@ class DoaController extends Controller
             ->timeout(10)
             ->get('https://equran.id/api/doa/'.$id)
             ->throw();
+        $listResponse = Http::connectTimeout(3)
+            ->timeout(10)
+            ->get('https://equran.id/api/doa')
+            ->throw();
+        $doaIds = collect($listResponse->json('data'))->pluck('id')->values();
+        $currentIndex = $doaIds->search($id);
 
         return view('doa.show', [
             'item' => $response->json('data'),
+            'previousDoa' => $currentIndex !== false && $currentIndex > 0
+                ? $doaIds->get($currentIndex - 1)
+                : null,
+            'nextDoa' => $currentIndex !== false && $currentIndex < $doaIds->count() - 1
+                ? $doaIds->get($currentIndex + 1)
+                : null,
         ]);
     }
 }

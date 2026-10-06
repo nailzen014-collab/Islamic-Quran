@@ -54,5 +54,22 @@
                 </div>
             @endif
         </div>
+
+        <nav class="mt-5 grid grid-cols-2 gap-3" aria-label="Navigasi doa">
+            @if ($previousDoa)
+                <a href="{{ route('doa.show', $previousDoa) }}" class="surface px-3 py-3 text-sm transition hover:text-emerald-600 sm:px-4">
+                    <span class="block text-xs text-slate-500">← Doa sebelumnya</span>
+                    <span class="mt-1 block font-medium">Doa #{{ $previousDoa }}</span>
+                </a>
+            @else
+                <span></span>
+            @endif
+            @if ($nextDoa)
+                <a href="{{ route('doa.show', $nextDoa) }}" class="surface px-3 py-3 text-right text-sm transition hover:text-emerald-600 sm:px-4">
+                    <span class="block text-xs text-slate-500">Doa berikutnya →</span>
+                    <span class="mt-1 block font-medium">Doa #{{ $nextDoa }}</span>
+                </a>
+            @endif
+        </nav>
     </section>
 @endsection

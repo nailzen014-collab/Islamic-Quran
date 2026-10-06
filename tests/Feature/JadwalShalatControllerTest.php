@@ -71,4 +71,46 @@ class JadwalShalatControllerTest extends TestCase
             ->assertSee('KOTA DENPASAR')
             ->assertSee('04:30');
     }
+
+    public function test_jadwal_pagination_keeps_selected_location_and_period(): void
+    {
+        $days = collect(range(1, 8))
+            ->map(fn (int $day): array => [
+                'tanggal' => 'Hari '.$day,
+                'imsak' => '04:30',
+                'subuh' => '04:40',
+                'terbit' => '05:55',
+                'dhuha' => '06:20',
+                'dzuhur' => '12:10',
+                'ashar' => '15:20',
+                'maghrib' => '18:15',
+                'isya' => '19:25',
+            ])
+            ->all();
+
+        Http::preventStrayRequests();
+        Http::fake([
+            'equran.id/api/v2/shalat/provinsi' => Http::response(['data' => ['Bali']]),
+            'equran.id/api/v2/shalat/kabkota' => Http::response(['data' => ['Denpasar']]),
+            'equran.id/api/v2/shalat' => Http::response([
+                'data' => [
+                    'lokasi' => 'KOTA DENPASAR',
+                    'daerah' => 'BALI',
+                    'jadwal' => $days,
+                ],
+            ]),
+        ]);
+
+        $this->get(route('jadwal.index', [
+            'provinsi' => 'Bali',
+            'kabkota' => 'Denpasar',
+            'bulan' => 10,
+            'tahun' => 2026,
+            'page' => 2,
+        ]))
+            ->assertOk()
+            ->assertSee('Hari 8')
+            ->assertDontSee('Hari 1')
+            ->assertSee('Halaman 2 dari 2');
+    }
 }
