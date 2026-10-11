@@ -38,9 +38,6 @@
                             <h2 class="display-title mt-1 text-lg">{{ $item['nama'] }}</h2>
                         </div>
 
-                        <div class="mt-7 flex justify-center sm:mt-9">
-                            @include('partials.mobile-pagination', ['paginator' => $doa])
-                        </div>
                         <span class="badge">#{{ $item['id'] }}</span>
                     </div>
                     @if (!empty($item['idn']))
@@ -53,6 +50,10 @@
                     Tidak ditemukan doa dengan kata kunci "{{ $query }}"
                 </div>
             @endforelse
+        </div>
+
+        <div class="mt-8 flex justify-center">
+            @include('partials.mobile-pagination', ['paginator' => $doa])
         </div>
     </section>
 @endsection
